@@ -5,7 +5,6 @@ import {
   useReducer,
 } from "react";
 import { quizReducer, quizInitialState } from "../reducers/quiz.reducer";
-import { QUIZ_INITIAL_STATE } from "../reducers/quiz.types";
 import { DATA_CONTEXT } from "./DataContext.types";
 
 const DataContext = createContext<DATA_CONTEXT>({

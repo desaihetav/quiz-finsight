@@ -1,11 +1,21 @@
+import { Quiz } from "../data/quiz.types";
+
 export type QUIZ_INITIAL_STATE = {
+  allQuizzes: Array<Quiz>;
+  currentQuiz: Quiz | null;
   quizId: string;
   questionNo: number;
   score: number;
   timer: number;
+  isClickEnabled: boolean;
 };
 
 export type ACTION =
+  | { type: "INITIALIZE_CURRENT_QUIZ"; payload: { quizId: string } }
+  | {
+      type: "SET_SELECTED_OPTION_ID";
+      payload: { optionId: string; questionId: string };
+    }
   | { type: "INCREMENT_SCORE"; payload: { score: number } }
   | { type: "DECREMENT_SCORE"; payload: { score: number } }
   | { type: "RESET_SCORE" }
@@ -13,4 +23,6 @@ export type ACTION =
   | { type: "RESET_QUESTION_NO" }
   | { type: "DECREMENT_TIMER" }
   | { type: "RESET_TIMER" }
-  | { type: "SET_QUIZ_ID"; payload: { quizId: string } };
+  | { type: "SET_QUIZ_ID"; payload: { quizId: string } }
+  | { type: "ENABLE_CLICK" }
+  | { type: "DISABLE_CLICK" };

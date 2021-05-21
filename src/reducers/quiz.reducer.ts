@@ -1,10 +1,15 @@
 import { QUIZ_INITIAL_STATE, ACTION } from "./quiz.types";
+import { allQuizzes } from "../data/quiz";
+import { Quiz } from "../data/quiz.types";
 
-export const quizInitialState = {
+export const quizInitialState: QUIZ_INITIAL_STATE = {
+  allQuizzes,
+  currentQuiz: null,
   quizId: "quiz01",
-  questionNo: 1,
+  questionNo: 0,
   score: 0,
   timer: 30,
+  isClickEnabled: true,
 };
 
 export const quizReducer = (
@@ -12,6 +17,34 @@ export const quizReducer = (
   action: ACTION
 ): QUIZ_INITIAL_STATE => {
   switch (action.type) {
+    case "INITIALIZE_CURRENT_QUIZ":
+      const { quizId } = action.payload;
+      const selectedQuiz: Quiz = state.allQuizzes.find(
+        (quiz) => quiz.id === quizId
+      ) as Quiz;
+      selectedQuiz.questions.forEach(
+        (question) => (question.selectedOptionId = null)
+      );
+      return {
+        ...state,
+        currentQuiz: selectedQuiz,
+      };
+    case "SET_SELECTED_OPTION_ID":
+      const { optionId, questionId } = action.payload;
+      return {
+        ...state,
+        currentQuiz: {
+          ...state.currentQuiz,
+          questions: state.currentQuiz?.questions.map((question) => {
+            return question.id === questionId
+              ? {
+                  ...question,
+                  selectedOptionId: optionId,
+                }
+              : question;
+          }),
+        } as Quiz,
+      };
     case "INCREMENT_SCORE":
       return {
         ...state,
@@ -51,6 +84,16 @@ export const quizReducer = (
       return {
         ...state,
         quizId: action.payload.quizId,
+      };
+    case "ENABLE_CLICK":
+      return {
+        ...state,
+        isClickEnabled: true,
+      };
+    case "DISABLE_CLICK":
+      return {
+        ...state,
+        isClickEnabled: false,
       };
     default:
       return state;
