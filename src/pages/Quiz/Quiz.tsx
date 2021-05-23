@@ -11,6 +11,7 @@ export default function Quiz() {
     dispatch,
   } = useData();
   const currentQuestion = currentQuiz?.questions[questionNo] as Question;
+  const [selectedOptionId, setSelectedOptionId] = useState("");
 
   const navigate = useNavigate();
 
@@ -33,6 +34,7 @@ export default function Quiz() {
   };
 
   const optionClickHandler = async (option: Option) => {
+    setSelectedOptionId(() => option.id);
     dispatch({
       type: "SET_SELECTED_OPTION_ID",
       payload: { optionId: option.id, questionId: currentQuestion.id },
@@ -55,9 +57,12 @@ export default function Quiz() {
       <div className="container">
         <div className="w-full flex my-8 justify-between text-xl font-semibold">
           <p>
-            Question: {questionNo + 1} / {currentQuiz.questions.length}
+            <span className="text-gray-400">Question:</span> {questionNo + 1} /{" "}
+            {currentQuiz.questions.length}
           </p>
-          <p>Score: {score}</p>
+          <p>
+            <span className="text-gray-400">Score:</span> {score}
+          </p>
         </div>
         <h3 className="font-bold my-4 text-lg">{currentQuestion.question}</h3>
         <div className="my-16">
@@ -66,10 +71,10 @@ export default function Quiz() {
               <button
                 disabled={!isClickEnabled}
                 onClick={() => optionClickHandler(option)}
-                className={`block w-full rounded-3xl text-lg my-6 py-6 bg-gray-800 transition-colors duration-200 ease-in ${
+                className={`block w-full rounded-3xl text-lg font-semibold my-6 py-6 bg-gray-800 transition-colors duration-200 ease-in ${
                   !isClickEnabled && option.isAnswer && "bg-green-600"
                 } ${
-                  option.id === currentQuestion.selectedOptionId &&
+                  option.id === selectedOptionId &&
                   !option.isAnswer &&
                   !isClickEnabled &&
                   "bg-red-600"
