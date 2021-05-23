@@ -19,6 +19,7 @@ export type Question = {
 export type Quiz = {
   id: string;
   name: string;
+  coverImageUrl: string;
   totalScore: number;
   questions: Array<Question>;
 };

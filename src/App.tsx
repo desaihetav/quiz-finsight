@@ -4,7 +4,7 @@ import { Home, Quiz, Result } from "./pages";
 
 function App() {
   return (
-    <div className="h-screen flex justify-center items-center">
+    <div className="min-h-screen flex justify-center items-center bg-gray-900 color text-gray-50">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/quiz/:quizId" element={<Quiz />} />

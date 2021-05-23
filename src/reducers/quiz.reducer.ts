@@ -1,11 +1,11 @@
 import { QUIZ_INITIAL_STATE, ACTION } from "./quiz.types";
-import { allQuizzes } from "../data/quiz";
+// import { allQuizzes } from "../data/quiz";
 import { Quiz } from "../data/quiz.types";
 
 export const quizInitialState: QUIZ_INITIAL_STATE = {
-  allQuizzes,
+  allQuizzes: null,
   currentQuiz: null,
-  quizId: "quiz01",
+  quizId: "",
   questionNo: 0,
   score: 0,
   timer: 30,
@@ -17,9 +17,21 @@ export const quizReducer = (
   action: ACTION
 ): QUIZ_INITIAL_STATE => {
   switch (action.type) {
+    case "RESET_STATE":
+      return {
+        ...quizInitialState,
+        allQuizzes: state.allQuizzes,
+      };
+
+    case "INITIALIZE_ALL_QUIZZES":
+      return {
+        ...state,
+        allQuizzes: action.payload.allQuizzes,
+      };
+
     case "INITIALIZE_CURRENT_QUIZ":
       const { quizId } = action.payload;
-      const selectedQuiz: Quiz = state.allQuizzes.find(
+      const selectedQuiz: Quiz = state.allQuizzes?.find(
         (quiz) => quiz.id === quizId
       ) as Quiz;
       selectedQuiz.questions.forEach(
@@ -29,6 +41,7 @@ export const quizReducer = (
         ...state,
         currentQuiz: selectedQuiz,
       };
+
     case "SET_SELECTED_OPTION_ID":
       const { optionId, questionId } = action.payload;
       return {
@@ -45,51 +58,61 @@ export const quizReducer = (
           }),
         } as Quiz,
       };
+
     case "INCREMENT_SCORE":
       return {
         ...state,
         score: state.score + action.payload.score,
       };
+
     case "DECREMENT_SCORE":
       return {
         ...state,
         score: state.score - action.payload.score,
       };
+
     case "RESET_SCORE":
       return {
         ...state,
         score: 0,
       };
+
     case "INCREMENT_QUESTION_NO":
       return {
         ...state,
         questionNo: state.questionNo + 1,
       };
+
     case "RESET_QUESTION_NO":
       return {
         ...state,
         questionNo: 0,
       };
+
     case "DECREMENT_TIMER":
       return {
         ...state,
         timer: state.timer - 1,
       };
+
     case "RESET_TIMER":
       return {
         ...state,
         timer: 30,
       };
+
     case "SET_QUIZ_ID":
       return {
         ...state,
         quizId: action.payload.quizId,
       };
+
     case "ENABLE_CLICK":
       return {
         ...state,
         isClickEnabled: true,
       };
+
     case "DISABLE_CLICK":
       return {
         ...state,

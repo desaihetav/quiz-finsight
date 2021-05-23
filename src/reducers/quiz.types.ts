@@ -1,7 +1,7 @@
 import { Quiz } from "../data/quiz.types";
 
 export type QUIZ_INITIAL_STATE = {
-  allQuizzes: Array<Quiz>;
+  allQuizzes: Array<Quiz> | null;
   currentQuiz: Quiz | null;
   quizId: string;
   questionNo: number;
@@ -11,6 +11,8 @@ export type QUIZ_INITIAL_STATE = {
 };
 
 export type ACTION =
+  | { type: "RESET_STATE"; payload: { quizId: string } }
+  | { type: "INITIALIZE_ALL_QUIZZES"; payload: { allQuizzes: Array<Quiz> } }
   | { type: "INITIALIZE_CURRENT_QUIZ"; payload: { quizId: string } }
   | {
       type: "SET_SELECTED_OPTION_ID";
